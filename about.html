@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ChromaSeek — Detailed System Architecture">
+    <title>ChromaSeek — System Architecture & Calculations</title>
+
+    <!-- CSS Design System -->
+    <link rel="stylesheet" href="assets/css/variables.css">
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/layout.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/animations.css">
+
+    <!-- Mermaid.js for Diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true, 
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#1e293b',
+                primaryTextColor: '#f8fafc',
+                primaryBorderColor: '#38bdf8',
+                lineColor: '#94a3b8',
+                secondaryColor: '#0f172a',
+                tertiaryColor: '#334155'
+            }
+        });
+    </script>
+
+    <style>
+        .about-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+            padding-bottom: 5rem;
+        }
+
+        .about-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            margin-top: 2rem;
+        }
+
+        .about-title {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .section-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--text-main);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: 10px;
+        }
+
+        .formula-box {
+            background: var(--bg-primary);
+            border-left: 4px solid var(--accent-purple);
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            margin: 1.5rem 0;
+            font-family: var(--font-mono);
+            color: var(--text-main);
+            overflow-x: auto;
+            line-height: 1.8;
+            font-size: 14px;
+            white-space: pre;
+        }
+
+        .concept-box {
+            background: rgba(56, 189, 248, 0.05);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            margin: 1.5rem 0;
+        }
+
+        .concept-title {
+            color: var(--accent-blue);
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        h3 {
+            color: var(--text-main);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+        
+        h4 {
+            color: var(--text-main);
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+            font-size: 1.05rem;
+        }
+
+        p {
+            line-height: 1.8;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            font-size: 15px;
+        }
+
+        ul {
+            margin-left: 20px;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+
+        .diagram-container {
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255,255,255,0.05);
+            text-align: center;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            font-size: 14px;
+        }
+
+        th, td {
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 12px;
+            text-align: left;
+            color: var(--text-secondary);
+        }
+
+        th {
+            background: rgba(255,255,255,0.05);
+            color: var(--text-main);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-header">
+        <div class="app-header__brand">
+            <div class="app-header__logo">🎨</div>
+            <div>
+                <div class="app-header__title">ChromaSeek</div>
+                <div class="app-header__subtitle">Smart Multimedia Retrieval</div>
+            </div>
+        </div>
+        <div class="app-header__nav" style="gap:15px; display:flex; align-items:center;">
+            <a href="index.php" class="nav-pill" style="border-color:rgba(255,255,255,0.1);color:var(--text-main);text-decoration:none">🏠 Home</a>
+            <a href="app.html" class="nav-pill" style="border-color:rgba(255,255,255,0.1);color:var(--text-main);text-decoration:none">🚀 App</a>
+            <a href="about.html" class="nav-pill" style="border-color:rgba(167,139,250,0.5);color:var(--accent-purple);text-decoration:none;background:rgba(167,139,250,0.1)">ℹ️ About</a>
+        </div>
+    </div>
+
+    <div class="about-container">
+        
+        <div class="about-header animate-slideUp">
+            <h1 class="about-title">System Architecture & Paradigms</h1>
+            <p style="font-size: 1.2rem; max-width: 800px; margin: 0 auto;">An in-depth explanation of TBR, CBR, and ABR in Multimedia Database Systems.</p>
+        </div>
+
+        <!-- 1. Overview -->
+        <div class="section-card animate-fadeIn" style="animation-delay: 0.1s">
+            <h2 class="section-title"><span class="dot dot--blue"></span>1. Overview of Retrieval Paradigms</h2>
+            <p>In multimedia databases, retrieving images is fundamentally different from retrieving text records. ChromaSeek employs three major paradigms to bridge the semantic gap:</p>
+            
+            <table>
+                <tr><th>Paradigm</th><th>Full Name</th><th>Key Idea</th></tr>
+                <tr><td><strong>TBR</strong></td><td>Text-Based Retrieval</td><td>Search by keywords, tags, captions, or metadata annotated by humans.</td></tr>
+                <tr><td><strong>CBR</strong></td><td>Content-Based Retrieval</td><td>Search by the visual content itself — colors, textures, shapes, spatial layout.</td></tr>
+                <tr><td><strong>ABR</strong></td><td>Attribute-Based Retrieval</td><td>Search by mid-level semantic attributes — structured properties derived from content (e.g., "dominant color = blue").</td></tr>
+            </table>
+
+            <div class="diagram-container">
+                <div class="mermaid">
+                    graph LR
+                        subgraph Retrieval Paradigms
+                            TBR["TBR\n(Text-Based)"]
+                            CBR["CBR\n(Content-Based)"]
+                            ABR["ABR\n(Attribute-Based)"]
+                        end
+                        
+                        TBR -->|"Keywords, Tags"| DB[(Multimedia DB)]
+                        CBR -->|"Feature Vectors"| DB
+                        ABR -->|"Structured Attributes"| DB
+                        
+                        DB -->|"Ranked Results"| R[Retrieved Images]
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. TBR Engine -->
+        <div class="section-card animate-fadeIn" style="animation-delay: 0.2s">
+            <h2 class="section-title"><span class="dot dot--green"></span>2. Text-Based Retrieval (TBR)</h2>
+            <p>TBR is the oldest and simplest paradigm. Every image in the database is manually annotated with textual metadata. Retrieval reduces to a text search problem. TBR does not analyze the image pixels at all.</p>
+            
+            <h3>Mathematical Formulation</h3>
+            <p>Given a query string <strong>Q</strong> and documents <strong>D</strong>, we tokenize them and compute <strong>TF-IDF vectors</strong>:</p>
+
+            <div class="formula-box" style="border-left-color: var(--accent-green)">
+TF(w, tᵢ) = (frequency of w in tᵢ) / (total terms in tᵢ)
+
+IDF(w) = log(N / df(w))
+    where N = total documents, df(w) = documents containing w
+
+TF-IDF(w, tᵢ) = TF(w, tᵢ) × IDF(w)
+            </div>
+            
+            <p>We then compute the <strong>Cosine Similarity</strong> between the query vector and document vector to find the closest matches:</p>
+            <div class="formula-box" style="border-left-color: var(--accent-green)">
+sim(q, tᵢ) = (q⃗ · t⃗ᵢ) / (‖q⃗‖ × ‖t⃗ᵢ‖)
+            </div>
+        </div>
+
+        <!-- 3. CBR Engine -->
+        <div class="section-card animate-fadeIn" style="animation-delay: 0.3s">
+            <h2 class="section-title"><span class="dot dot--yellow"></span>3. Content-Based Retrieval (CBR)</h2>
+            <p>CBR analyzes the actual pixel content of images, extracting color histograms and statistical moments to bridge the "semantic gap" without relying on human labels.</p>
+            
+            <h3>Mathematical Formulation — Color Features</h3>
+            <h4>Color Histogram</h4>
+            <div class="formula-box" style="border-left-color: var(--accent-yellow)">
+H = [h₁, h₂, …, h_B]
+where hⱼ = (number of pixels in bin j) / (total pixels)
+            </div>
+            
+            <h4>Color Moments (Statistical Descriptors)</h4>
+            <div class="formula-box" style="border-left-color: var(--accent-yellow)">
+Mean (1st moment):     μ_c = (1/N) × Σᵢ pᵢ,c
+Std Dev (2nd moment):  σ_c = √[(1/N) × Σᵢ (pᵢ,c − μ_c)²]
+Skewness (3rd moment): s_c = ∛[(1/N) × Σᵢ (pᵢ,c − μ_c)³]
+            </div>
+
+            <h3>Distance Metrics for CBR</h3>
+            <p>We use the <strong>Chi-Square Distance</strong> which is optimal for histogram comparisons as it normalizes the differences:</p>
+            <div class="formula-box" style="border-left-color: var(--accent-yellow)">
+χ²(Q, D) = Σⱼ (Qⱼ − Dⱼ)² / (Qⱼ + Dⱼ)
+            </div>
+
+            <div class="diagram-container">
+                <div class="mermaid">
+                    flowchart LR
+                        A[Query Image] --> B[Feature Extraction]
+                        B --> C[Color Histogram\nColor Moments\nCorrelogram]
+                        C --> D[Distance Computation]
+                        
+                        E[(Image Database)] --> F[Pre-computed\nFeature Vectors]
+                        F --> D
+                        
+                        D --> G[Rank by Similarity]
+                        G --> H[Top-K Results]
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. ABR Engine -->
+        <div class="section-card animate-fadeIn" style="animation-delay: 0.4s">
+            <h2 class="section-title"><span class="dot dot--purple"></span>4. Attribute-Based Retrieval (ABR)</h2>
+            <p>ABR sits between TBR and CBR. It extracts structured, named attributes from image content (e.g. "Warm", "High Saturation"), converting low-level features into mid-level semantic properties.</p>
+
+            <h3>Mathematical Formulation</h3>
+            
+            <h4>1. Dominant Color Extraction (K-Means)</h4>
+            <div class="formula-box" style="border-left-color: var(--accent-purple)">
+Objective: minimize J = Σᵢ₌₁ᴺ Σₖ₌₁ᴷ rᵢₖ ‖pᵢ − μₖ‖²
+where rᵢₖ = 1 if pixel i belongs to cluster k, 0 otherwise
+      μₖ = cluster center (the "dominant color")
+            </div>
+
+            <h4>2. Colorfulness Metric (Hasler & Süsstrunk)</h4>
+            <div class="formula-box" style="border-left-color: var(--accent-purple)">
+rg = R − G
+yb = 0.5 × (R + G) − B
+
+Colorfulness = √(σ_rg² + σ_yb²) + 0.3 × √(μ_rg² + μ_yb²)
+            </div>
+
+            <h4>3. Attribute Matching — Weighted Distance</h4>
+            <div class="formula-box" style="border-left-color: var(--accent-purple)">
+dist(A_q, A_d) = Σⱼ wⱼ × δⱼ(A_q[j], A_d[j])
+            </div>
+
+            <div class="diagram-container">
+                <div class="mermaid">
+                    flowchart TB
+                        subgraph Indexing Phase
+                            A[Image] --> B[Pixel Analysis]
+                            B --> C1[K-Means → Dominant Colors]
+                            B --> C2[Statistics → Colorfulness]
+                            B --> C3[HSV Analysis → Temperature]
+                            B --> C4[Histogram → Brightness]
+                            C1 & C2 & C3 & C4 --> D[Attribute Record]
+                            D --> E[(Attribute Database)]
+                        end
+                        
+                        subgraph Query Phase
+                            F[User Query\n'warm, high saturation,\ndominant=orange'] --> G[Parse Attributes]
+                            G --> H[Weighted Distance\nComputation]
+                            E --> H
+                            H --> I[Ranked Results]
+                        end
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. Full Implementation Architecture -->
+        <div class="section-card animate-fadeIn" style="animation-delay: 0.5s">
+            <h2 class="section-title"><span class="dot dot--blue"></span>Implementation Architecture</h2>
+            <p>The final flow of ChromaSeek incorporates all three engines working side-by-side on a unified database.</p>
+            
+            <div class="diagram-container">
+                <div class="mermaid">
+                    flowchart TB
+                        subgraph "ChromaSeek System"
+                            direction TB
+                            
+                            subgraph Input
+                                IMG[Upload Image]
+                                TXT[Text Query]
+                                ATTR[Attribute Filters]
+                            end
+                            
+                            subgraph Processing
+                                FE[Feature Extractor]
+                                FE --> H1[Color Histogram]
+                                FE --> H2[Color Moments]
+                                FE --> H3[Dominant Colors K-Means]
+                                FE --> H4[Colorfulness]
+                                FE --> H5[Temperature]
+                            end
+                            
+                            subgraph Storage
+                                DB[(Database)]
+                                DB --- T1[Tags Table - TBR]
+                                DB --- T2[Features Table - CBR]
+                                DB --- T3[Attributes Table - ABR]
+                            end
+                            
+                            subgraph Retrieval
+                                TBR_E[TBR Engine\nTF-IDF + Cosine]
+                                CBR_E[CBR Engine\nχ² Distance]
+                                ABR_E[ABR Engine\nWeighted Attr Distance]
+                                FUSE[Score Fusion\nα·TBR + β·CBR + γ·ABR]
+                            end
+                            
+                            IMG --> FE
+                            FE --> DB
+                            TXT --> TBR_E
+                            IMG --> CBR_E
+                            ATTR --> ABR_E
+                            DB --> TBR_E & CBR_E & ABR_E
+                            TBR_E & CBR_E & ABR_E --> FUSE
+                            FUSE --> RES[Ranked Results]
+                        end
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. Key Formulas Summary -->
+        <div class="section-card animate-fadeIn" style="animation-delay: 0.6s">
+            <h2 class="section-title"><span class="dot dot--green"></span>Key Formulas Summary</h2>
+            <table>
+                <tr><th>Formula</th><th>Used In</th><th>Purpose</th></tr>
+                <tr><td><code>TF-IDF(w,d) = TF(w,d) × log(N/df(w))</code></td><td>TBR</td><td>Term weighting</td></tr>
+                <tr><td><code>cosine(q⃗, d⃗) = (q⃗·d⃗)/(‖q⃗‖‖d⃗‖)</code></td><td>TBR</td><td>Text similarity</td></tr>
+                <tr><td><code>H[j] = count(bin j) / total_pixels</code></td><td>CBR</td><td>Color histogram</td></tr>
+                <tr><td><code>μ_c = (1/N)Σpᵢ,c</code></td><td>CBR, ABR</td><td>Mean color moment</td></tr>
+                <tr><td><code>χ²(Q,D) = Σ(Qⱼ−Dⱼ)²/(Qⱼ+Dⱼ)</code></td><td>CBR</td><td>Histogram distance</td></tr>
+                <tr><td><code>J = ΣΣ rᵢₖ‖pᵢ−μₖ‖²</code></td><td>ABR</td><td>K-means for dominant colors</td></tr>
+                <tr><td><code>Colorfulness = √(σ²_rg+σ²_yb)+0.3√(μ²_rg+μ²_yb)</code></td><td>ABR</td><td>Colorfulness metric</td></tr>
+                <tr><td><code>dist(A_q,A_d) = Σ wⱼ δⱼ(Aq[j],Ad[j])</code></td><td>ABR</td><td>Attribute matching</td></tr>
+            </table>
+        </div>
+
+    </div>
+
+</body>
+</html>

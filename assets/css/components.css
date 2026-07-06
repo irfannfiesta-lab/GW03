@@ -1,0 +1,325 @@
+/* ============================================================
+   COMPONENTS — Cards, Tabs, Badges, Swatches, Panels
+   ============================================================ */
+
+/* --- Card --- */
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    box-shadow: var(--shadow-card);
+    transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.card:hover {
+    border-color: var(--border-accent);
+    box-shadow: var(--shadow-glow);
+}
+
+.card__header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-base);
+}
+
+.card__icon {
+    font-size: var(--text-md);
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+}
+
+.card__title {
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-secondary);
+}
+
+.card__title .dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    margin-right: var(--space-xs);
+    vertical-align: middle;
+}
+
+.dot--blue   { background: var(--accent-blue); }
+.dot--red    { background: var(--accent-red); }
+.dot--green  { background: var(--accent-green); }
+.dot--yellow { background: var(--accent-yellow); }
+.dot--purple { background: var(--accent-purple); }
+
+/* --- Tabs --- */
+.tabs {
+    display: flex;
+    gap: 2px;
+    background: var(--bg-primary);
+    border-radius: var(--radius-md);
+    padding: 3px;
+    border: 1px solid var(--border-subtle);
+}
+
+.tab {
+    flex: 1;
+    padding: var(--space-sm) var(--space-base);
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+    text-align: center;
+}
+
+.tab:hover {
+    color: var(--text-secondary);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.tab.active {
+    background: var(--accent-blue);
+    color: var(--bg-primary);
+    font-weight: var(--font-semibold);
+    box-shadow: 0 2px 8px rgba(56, 189, 248, 0.3);
+}
+
+/* --- Badge / Tag --- */
+.badge {
+    display: inline-block;
+    padding: 2px 8px;
+    font-size: var(--text-xs);
+    border-radius: var(--radius-sm);
+    font-weight: var(--font-medium);
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+}
+
+.badge--blue   { color: var(--accent-blue);   border-color: rgba(56,189,248,0.3); background: var(--accent-blue-glow); }
+.badge--green  { color: var(--accent-green);  border-color: rgba(52,211,153,0.3); background: var(--accent-green-glow); }
+.badge--red    { color: var(--accent-red);    border-color: rgba(248,113,113,0.3); background: var(--accent-red-glow); }
+.badge--yellow { color: var(--accent-yellow); border-color: rgba(251,191,36,0.3);  background: var(--accent-yellow-glow); }
+.badge--purple { color: var(--accent-purple); border-color: rgba(167,139,250,0.3); background: var(--accent-purple-glow); }
+
+/* --- Color Swatch --- */
+.swatch {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-primary);
+}
+
+.swatch__color {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-full);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+}
+
+.swatch__label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+}
+
+.swatch__weight {
+    font-size: 10px;
+    color: var(--text-muted);
+}
+
+/* --- Stat Box --- */
+.stat {
+    text-align: center;
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+    background: var(--bg-primary);
+    border: 1px solid var(--border-subtle);
+}
+
+.stat__label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: var(--space-xs);
+}
+
+.stat__value {
+    font-family: var(--font-mono);
+    font-size: var(--text-md);
+    font-weight: var(--font-bold);
+}
+
+.stat__value--red    { color: var(--accent-red); }
+.stat__value--green  { color: var(--accent-green); }
+.stat__value--blue   { color: var(--accent-blue); }
+
+/* --- Progress Bar --- */
+.progress-bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-sm) 0;
+}
+
+.progress-bar__label {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    min-width: 120px;
+}
+
+.progress-bar__track {
+    flex: 1;
+    height: 6px;
+    background: var(--bg-primary);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-bar__fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width var(--transition-slow);
+}
+
+.progress-bar__value {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+    min-width: 70px;
+    text-align: right;
+}
+
+/* --- Loading Spinner --- */
+.spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border-light);
+    border-top-color: var(--accent-blue);
+    border-radius: var(--radius-full);
+    animation: spin 0.6s linear infinite;
+}
+
+/* --- Nav Pill --- */
+.nav-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 16px;
+    border-radius: var(--radius-xl);
+    border: 1px solid;
+    font-size: var(--text-xs);
+    font-weight: var(--font-semibold);
+    letter-spacing: 0.5px;
+    cursor: default;
+}
+
+/* --- Image Analysis Panel --- */
+.analysis-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    margin-top: var(--space-lg);
+}
+
+.analysis-panel__description {
+    font-size: var(--text-base);
+    color: var(--text-secondary);
+    line-height: 1.8;
+    padding: var(--space-base);
+    background: var(--bg-primary);
+    border-radius: var(--radius-md);
+    border-left: 3px solid var(--accent-purple);
+}
+
+.analysis-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-sm) 0;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.analysis-row:last-child { border-bottom: none; }
+
+.analysis-row__label {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    min-width: 130px;
+}
+
+.analysis-row__value {
+    font-size: var(--text-sm);
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+/* --- Info Tooltips --- */
+.panel-info-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    color: var(--text-muted);
+    font-size: 12px;
+    cursor: help;
+    margin-left: 8px;
+    position: relative;
+    transition: background 0.2s, color 0.2s;
+}
+.panel-info-icon:hover {
+    background: var(--accent-blue);
+    color: #fff;
+}
+.panel-info-icon .panel-tooltip {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    top: 130%;
+    right: 0;
+    width: 280px;
+    background: var(--bg-secondary);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    font-size: 13px;
+    color: var(--text-main);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    z-index: 1000;
+    transition: opacity 0.2s, transform 0.2s;
+    transform: translateY(-5px);
+    pointer-events: none;
+    font-family: var(--font-main);
+    text-align: left;
+    line-height: 1.5;
+    font-weight: normal;
+}
+.panel-info-icon:hover .panel-tooltip {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+}
+.panel-tooltip strong {
+    color: var(--accent-blue);
+}

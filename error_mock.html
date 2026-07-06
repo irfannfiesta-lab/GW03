@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        body { background: #1e1e1e; color: #d4d4d4; font-family: Consolas, monospace; padding: 20px; font-size: 14px; }
+        .error { color: #f48771; }
+        .file { color: #4fc1ff; text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div id="cors" style="margin-bottom:40px">
+        <span class="error">Access to image at 'https://bitp3353.utem.edu.my/2026/all/uploads/photo.jpg' from origin 'http://localhost' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.</span>
+        <br><span class="file">ImageAnalyzer.js:42</span>
+    </div>
+    
+    <div id="module" style="margin-bottom:40px">
+        <span class="error">Uncaught SyntaxError: Cannot use import statement outside a module</span>
+        <br><span class="file">app.js:1</span>
+    </div>
+
+    <div id="db">
+        <span style="color:#f1f1f1"><b>Fatal error</b>: Uncaught PDOException: SQLSTATE[HY000] [1049] Unknown database 'color_retrieval_db' in C:\xampp\htdocs\color-retrieval-system\api\config.php:12</span>
+        <br>Stack trace:
+        <br>#0 C:\xampp\htdocs\color-retrieval-system\api\config.php(12): PDO->__construct('mysql:host=loca...', 'root', '', Array)
+        <br>#1 {main}
+        <br>  thrown in <span class="file">C:\xampp\htdocs\color-retrieval-system\api\config.php</span> on line <b>12</b>
+    </div>
+</body>
+</html>

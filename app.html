@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ChromaSeek — TBR, CBR, ABR multimedia database search engine with real-time feature extraction and image analysis.">
+    <title>ChromaSeek — Smart Multimedia Retrieval</title>
+
+    <!-- CSS Design System -->
+    <link rel="stylesheet" href="assets/css/variables.css">
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/layout.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/forms.css">
+    <link rel="stylesheet" href="assets/css/results.css">
+    <link rel="stylesheet" href="assets/css/animations.css">
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════ HEADER -->
+<header class="app-header">
+    <div class="app-header__brand">
+        <div class="app-header__logo">🎨</div>
+        <div>
+            <div class="app-header__title">ChromaSeek</div>
+            <div class="app-header__subtitle">Smart Multimedia Retrieval • TBR | CBR | ABR</div>
+        </div>
+    </div>
+    <div class="app-header__nav" style="gap:15px; display:flex; align-items:center;">
+        <div style="display:flex; gap:8px; margin-right: 20px; border-right: 1px solid rgba(255,255,255,0.1); padding-right: 20px;">
+            <a href="index.php" class="nav-pill" style="border-color:rgba(255,255,255,0.1);color:var(--text-main);text-decoration:none;cursor:pointer">🏠 Home</a>
+            <a href="app.html" class="nav-pill" style="border-color:var(--accent-blue);color:var(--accent-blue);text-decoration:none;cursor:pointer;background:rgba(56,189,248,0.1)">🚀 App</a>
+            <a href="about.html" class="nav-pill" style="border-color:rgba(255,255,255,0.1);color:var(--text-main);text-decoration:none;cursor:pointer">ℹ️ About</a>
+        </div>
+    </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════ MAIN LAYOUT -->
+<main class="app-main">
+
+    <!-- ────────── LEFT SIDEBAR ────────── -->
+    <aside class="sidebar">
+
+        <!-- Upload Zone -->
+        <div class="card">
+            <div class="card__header">
+                <span class="card__title"><span class="dot dot--blue"></span>📷 IMAGE INPUT</span>
+                <div class="panel-info-icon">ℹ️
+                    <div class="panel-tooltip">
+                        <strong>Image Input</strong><br>
+                        Upload an image or select a random sample to begin extraction. The system will process this image to determine color moments, K-Means dominant colors, and image attributes.
+                    </div>
+                </div>
+            </div>
+            <div class="upload-zone" id="upload-zone">
+                <img id="preview-img" class="upload-zone__preview" style="display:none" alt="Preview">
+                <div class="upload-zone__icon">📁</div>
+                <div class="upload-zone__text">Drop an image here or click to upload</div>
+                <input type="file" id="file-input" accept="image/*">
+            </div>
+            <div style="margin-top:var(--space-md);display:flex;flex-direction:column;gap:var(--space-sm)">
+                <button class="btn btn--outline btn--sm" id="btn-sample" style="flex:1">🎲 Random Sample</button>
+                <button class="btn btn--outline btn--sm" id="btn-upload-trigger" style="flex:1">📁 Upload Image</button>
+            </div>
+            <div style="margin-top:var(--space-md); display:flex; align-items:center; gap: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="disable-hijab">
+                    <span class="toggle-slider"></span>
+                </label>
+                <label for="disable-hijab" style="font-size:12px; color:var(--text-main); cursor:pointer;">
+                    Disable Hijab Detection<br>
+                    <span style="color:var(--text-muted); font-size:11px;">(Check this for male subjects or non-hijab wearers)</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Student Gallery -->
+        <div class="card">
+            <div class="card__header" style="display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                    <span class="card__title"><span class="dot dot--green"></span>👥 STUDENT GALLERY</span>
+                    <div class="panel-info-icon">ℹ️
+                        <div class="panel-tooltip">
+                            <strong>Student Gallery</strong><br>
+                            Displays profiles fetched from the UTeM portal. Click a student to load their profile photo for analysis and to view their metadata dashboard.
+                        </div>
+                    </div>
+                </div>
+                <button id="btn-analyze-all" class="btn btn--outline btn--sm" style="border-color:var(--accent-purple); color:var(--accent-purple);">✨ Analyze All DB</button>
+            </div>
+            <div class="gallery-grid" id="gallery-grid">
+                <!-- Gallery thumbs populated by UIManager -->
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-top: 15px; gap: 10px;">
+                <button id="btn-gallery-prev" class="btn btn--outline btn--sm" style="flex: 1; border-color: rgba(255,255,255,0.1); color: var(--text-secondary); display: none;">&larr; Prev</button>
+                <button id="btn-gallery-next" class="btn btn--outline btn--sm" style="flex: 1; border-color: rgba(255,255,255,0.1); color: var(--text-secondary); display: none;">Next &rarr;</button>
+            </div>
+        </div>
+
+        <!-- Formula Display -->
+        <div class="card" id="formula-display">
+            <!-- Populated by UIManager -->
+        </div>
+
+        <!-- Status Bar -->
+        <div class="card" id="status-bar" style="font-size:var(--text-sm);color:var(--text-secondary);border-left:3px solid var(--accent-blue);padding:var(--space-md) var(--space-base)">
+            Initializing system...
+        </div>
+    </aside>
+
+    <!-- ────────── RIGHT CONTENT ────────── -->
+    <div class="content-area">
+
+        <!-- Extraction Results Grid -->
+        <div class="feature-grid">
+            <!-- Histogram -->
+            <div class="card">
+                <div class="card__header">
+                    <span class="card__title"><span class="dot dot--red"></span>📊 COLOR HISTOGRAM (R|G|B)</span>
+                    <div class="panel-info-icon">ℹ️
+                        <div class="panel-tooltip">
+                            <strong>Color Histogram</strong><br>
+                            A visual representation of the tonal distribution of Red, Green, and Blue pixels in the image. Used heavily by the CBR engine for image-to-image similarity matching.
+                        </div>
+                    </div>
+                </div>
+                <canvas id="histogram-canvas" width="500" height="200" style="width:100%;border-radius:var(--radius-md)"></canvas>
+            </div>
+
+            <!-- Dominant Colors -->
+            <div id="dominant-colors">
+                <div class="card">
+                    <div class="card__header">
+                        <span class="card__title"><span class="dot dot--yellow"></span>🎨 DOMINANT COLORS (K-MEANS)</span>
+                        <div class="panel-info-icon">ℹ️
+                            <div class="panel-tooltip">
+                                <strong>K-Means Clustering</strong><br>
+                                The system uses K-Means++ initialization to cluster all pixels into primary dominant colors. The percentages represent how much of the image area is composed of that specific cluster.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="empty-state" style="padding:var(--space-xl)">
+                        <div class="empty-state__text">Upload an image to extract colors</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature Stats + Image Analysis -->
+        <div class="feature-grid">
+            <div id="feature-stats">
+                <div class="card">
+                    <div class="card__header">
+                        <span class="card__title"><span class="dot dot--green"></span>📊 COLOR MOMENTS & ATTRIBUTES</span>
+                        <div class="panel-info-icon">ℹ️
+                            <div class="panel-tooltip">
+                                <strong>Color Moments & Attributes</strong><br>
+                                - <strong>Mean:</strong> The average intensity of each RGB channel.<br>
+                                - <strong>Std Dev:</strong> Standard Deviation, representing the contrast/variance of color.<br>
+                                - <strong>Colorfulness:</strong> How vivid or dull the image is (based on opponent color space).<br>
+                                - <strong>Temperature:</strong> Whether the image is warm (red/yellow) or cool (blue/cyan).
+                            </div>
+                        </div>
+                    </div>
+                    <div class="empty-state" style="padding:var(--space-xl)">
+                        <div class="empty-state__text">Upload an image to compute features</div>
+                    </div>
+                </div>
+            </div>
+            <div id="image-analysis">
+                <div class="card">
+                    <div class="card__header">
+                        <span class="card__title"><span class="dot dot--purple"></span>📝 IMAGE ANALYTICAL SUMMARY</span>
+                        <div class="panel-info-icon">ℹ️
+                            <div class="panel-tooltip">
+                                <strong>Image Analytical Summary</strong><br>
+                                Our rule-based heuristic engine segments the image into predefined zones (Head, Face, Body, Background) to automatically deduce physical attributes and clothing colors without relying on complex AI models.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="empty-state" style="padding:var(--space-xl)">
+                        <div class="empty-state__text">Upload an image to see analytical summary</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Student Profile & Metadata Dashboard -->
+        <div id="student-profile-container" style="display:none; margin-bottom:var(--space-base);">
+            <div class="card">
+                <div class="card__header" style="justify-content:space-between; display:flex">
+                    <span class="card__title" style="color:var(--accent-blue)"><span class="dot dot--blue"></span>PROJECT METADATA DASHBOARD</span>
+                </div>
+                <div id="student-profile-content" style="padding-top: var(--space-md);">
+                    <!-- Rendered by ResultsRenderer.js -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ─── Search Tabs ─── -->
+        <div class="card">
+            <div class="tabs">
+                <button class="tab active" data-tab="tbr">🔤 TBR — Text Search</button>
+                <button class="tab" data-tab="cbr">🖼️ CBR — Image Search</button>
+                <button class="tab" data-tab="abr">⚙️ ABR — Attribute Search</button>
+            </div>
+
+            <!-- TBR Panel -->
+            <div class="tab-panel" data-panel="tbr" style="margin-top:var(--space-base)">
+                <div class="form-group">
+                    <label class="label">Search Keywords</label>
+                    <input class="input" type="text" id="tbr-query" placeholder="e.g. hijab red, dark skin, blue background..." value="">
+                </div>
+                <div class="form-group">
+                    <label class="label">Similarity Metric</label>
+                    <select class="select" id="tbr-metric">
+                        <option value="cosine">Cosine Similarity (TF-IDF)</option>
+                        <option value="jaccard">Jaccard Index</option>
+                    </select>
+                </div>
+                <button class="btn btn--primary" id="btn-tbr-search">🔍 Search by Text</button>
+            </div>
+
+            <!-- CBR Panel -->
+            <div class="tab-panel" data-panel="cbr" style="display:none;margin-top:var(--space-base)">
+                <p class="text-muted text-sm" style="margin-bottom:var(--space-base)">
+                    Upload a query image above, then compare its color histogram against all database images.
+                </p>
+                <div class="form-group">
+                    <label class="label">Distance Metric</label>
+                    <select class="select" id="cbr-metric">
+                        <option value="chi-square">Chi-Square (χ²) Distance</option>
+                        <option value="euclidean">Euclidean Distance</option>
+                        <option value="manhattan">Manhattan Distance</option>
+                        <option value="intersection">Histogram Intersection</option>
+                    </select>
+                </div>
+                <button class="btn btn--green" id="btn-cbr-search">🖼️ Search by Image Content</button>
+            </div>
+
+            <!-- ABR Panel -->
+            <div class="tab-panel" data-panel="abr" style="display:none;margin-top:var(--space-base)">
+                <p class="text-muted text-sm" style="margin-bottom:var(--space-base)">
+                    Upload a query image above, then match based on weighted color attributes.
+                </p>
+                <div class="form-group">
+                    <label class="label">Dominant Color Weight</label>
+                    <div class="slider-group">
+                        <input class="slider" type="range" id="w-color" min="0" max="1" step="0.05" value="0.35">
+                        <span class="slider-value" id="w-color-val">0.35</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="label">Temperature Weight</label>
+                    <div class="slider-group">
+                        <input class="slider" type="range" id="w-temp" min="0" max="1" step="0.05" value="0.25">
+                        <span class="slider-value" id="w-temp-val">0.25</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="label">Colorfulness Weight</label>
+                    <div class="slider-group">
+                        <input class="slider" type="range" id="w-colorfulness" min="0" max="1" step="0.05" value="0.20">
+                        <span class="slider-value" id="w-colorfulness-val">0.20</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="label">Saturation Weight</label>
+                    <div class="slider-group">
+                        <input class="slider" type="range" id="w-saturation" min="0" max="1" step="0.05" value="0.20">
+                        <span class="slider-value" id="w-saturation-val">0.20</span>
+                    </div>
+                </div>
+                <button class="btn btn--purple" id="btn-abr-search">⚙️ Search by Attributes</button>
+            </div>
+        </div>
+
+        <!-- ─── Search Results ─── -->
+        <div class="results-area">
+            <div class="card">
+                <div class="card__header">
+                    <span class="card__title"><span class="dot dot--green"></span>🏆 SEARCH RESULTS</span>
+                    <div class="panel-info-icon">ℹ️
+                        <div class="panel-tooltip">
+                            <strong>Search Results</strong><br>
+                            Displays the top matching student profiles ranked by similarity score based on your selected retrieval engine (TBR, CBR, or ABR).
+                        </div>
+                    </div>
+                </div>
+                <div id="search-results">
+                    <div class="empty-state">
+                        <div class="empty-state__icon">🔍</div>
+                        <div class="empty-state__text">Run a search to see results here</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Distance Table -->
+            <div class="card">
+                <div class="card__header">
+                    <span class="card__title"><span class="dot dot--blue"></span>📐 DISTANCE / SCORE TABLE</span>
+                    <div class="panel-info-icon">ℹ️
+                        <div class="panel-tooltip">
+                            <strong>Distance / Score Table</strong><br>
+                            A detailed breakdown of the mathematical distances between the query and the database images. Lower distance generally means higher similarity (100% score).
+                        </div>
+                    </div>
+                </div>
+                <div id="results-table" style="max-height:400px;overflow-y:auto">
+                    <div class="empty-state" style="padding:var(--space-lg)">
+                        <div class="empty-state__text">Results will appear after search</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Computation Log -->
+            <div class="card">
+                <div class="card__header">
+                    <span class="card__title"><span class="dot dot--purple"></span>🖥️ COMPUTATION LOG</span>
+                    <div class="panel-info-icon">ℹ️
+                        <div class="panel-tooltip">
+                            <strong>Computation Log</strong><br>
+                            Real-time readout of the algorithm's calculations (e.g., TF-IDF weights, Chi-Square accumulations) so you can see exactly how the scores were generated.
+                        </div>
+                    </div>
+                </div>
+                <div id="computation-log">
+                    <div class="computation-log">// Computation details will appear here after a search...</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<!-- ═══════════════════════════════════════════════════ SCRIPTS -->
+<!-- ABR slider value sync -->
+<script>
+    document.querySelectorAll('.slider').forEach(slider => {
+        const valSpan = document.getElementById(slider.id + '-val');
+        if (valSpan) {
+            slider.addEventListener('input', () => { valSpan.textContent = parseFloat(slider.value).toFixed(2); });
+        }
+    });
+</script>
+
+<!-- Main Application (ES Modules) -->
+<script type="module" src="js/app.js?v=5"></script>
+
+</body>
+</html>

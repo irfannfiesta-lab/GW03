@@ -1,0 +1,94 @@
+/* ============================================================
+   DESIGN TOKENS — Color Extraction & Retrieval System
+   ============================================================ */
+
+:root {
+    /* --- Color Palette --- */
+    --bg-primary:       #0a0e17;
+    --bg-secondary:     #111827;
+    --bg-card:          #1a2235;
+    --bg-card-hover:    #1f2a40;
+    --bg-input:         #0d1321;
+    --bg-code:          #0c1222;
+
+    --border-subtle:    rgba(255, 255, 255, 0.06);
+    --border-light:     rgba(255, 255, 255, 0.10);
+    --border-accent:    rgba(56, 189, 248, 0.25);
+
+    --text-primary:     #f1f5f9;
+    --text-secondary:   #94a3b8;
+    --text-muted:       #64748b;
+    --text-label:       #cbd5e1;
+
+    /* Accent Colors */
+    --accent-blue:      #38bdf8;
+    --accent-blue-glow: rgba(56, 189, 248, 0.15);
+    --accent-green:     #34d399;
+    --accent-green-glow:rgba(52, 211, 153, 0.15);
+    --accent-red:       #f87171;
+    --accent-red-glow:  rgba(248, 113, 113, 0.15);
+    --accent-yellow:    #fbbf24;
+    --accent-yellow-glow:rgba(251, 191, 36, 0.15);
+    --accent-purple:    #a78bfa;
+    --accent-purple-glow:rgba(167, 139, 250, 0.15);
+    --accent-orange:    #fb923c;
+    --accent-cyan:      #22d3ee;
+
+    /* Gradient */
+    --gradient-primary: linear-gradient(135deg, #38bdf8, #a78bfa);
+    --gradient-warm:    linear-gradient(135deg, #fb923c, #f87171);
+    --gradient-cool:    linear-gradient(135deg, #38bdf8, #34d399);
+    --gradient-card:    linear-gradient(180deg, rgba(56,189,248,0.03) 0%, transparent 100%);
+
+    /* --- Typography --- */
+    --font-sans:   'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    --font-mono:   'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+    --font-display:'Outfit', 'Inter', sans-serif;
+
+    --text-xs:     0.75rem;   /* 12px */
+    --text-sm:     0.8125rem; /* 13px */
+    --text-base:   0.875rem;  /* 14px */
+    --text-md:     1rem;      /* 16px */
+    --text-lg:     1.125rem;  /* 18px */
+    --text-xl:     1.5rem;    /* 24px */
+    --text-2xl:    2rem;      /* 32px */
+
+    --font-normal: 400;
+    --font-medium: 500;
+    --font-semibold: 600;
+    --font-bold:   700;
+
+    /* --- Spacing --- */
+    --space-xs:    0.25rem;   /* 4px */
+    --space-sm:    0.5rem;    /* 8px */
+    --space-md:    0.75rem;   /* 12px */
+    --space-base:  1rem;      /* 16px */
+    --space-lg:    1.5rem;    /* 24px */
+    --space-xl:    2rem;      /* 32px */
+    --space-2xl:   3rem;      /* 48px */
+
+    /* --- Borders & Radius --- */
+    --radius-sm:   6px;
+    --radius-md:   10px;
+    --radius-lg:   14px;
+    --radius-xl:   20px;
+    --radius-full: 50%;
+
+    /* --- Shadows --- */
+    --shadow-card:  0 4px 24px rgba(0, 0, 0, 0.25);
+    --shadow-glow:  0 0 20px rgba(56, 189, 248, 0.1);
+    --shadow-deep:  0 8px 40px rgba(0, 0, 0, 0.4);
+
+    /* --- Transitions --- */
+    --transition-fast:   150ms ease;
+    --transition-base:   250ms ease;
+    --transition-slow:   400ms ease;
+
+    /* --- Z-index --- */
+    --z-base:      1;
+    --z-dropdown:  10;
+    --z-sticky:    20;
+    --z-overlay:   30;
+    --z-modal:     40;
+    --z-tooltip:   50;
+}
